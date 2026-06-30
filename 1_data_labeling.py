@@ -2,7 +2,6 @@ import pandas as pd
 import os
 
 # --- HÀM PHỤ TRỢ: CHUYỂN SỐ SAO THÀNH NHÃN ---
-# Viết rõ ràng bằng if-else thay vì dùng cú pháp viết tắt (lambda)
 def chuyen_sao_thanh_nhan(so_sao):
     if so_sao >= 4:
         return 1  # 4 và 5 sao là Tích cực
@@ -26,7 +25,6 @@ def label_data(input_file, output_file):
     df = df.dropna(subset=['Review', 'Rating'])
     
     # Bước 2: Lọc bỏ các đánh giá 3 sao (Trung lập)
-    # Viết rõ điều kiện ra một biến riêng cho dễ đọc
     dieu_kien_khac_3_sao = (df['Rating'] != 3)
     df = df[dieu_kien_khac_3_sao] 
     

@@ -30,24 +30,24 @@ def preprocess_data(input_file, output_file):
     print(f"[*] Tổng số dòng dữ liệu ban đầu: {so_luong_ban_dau}")
     print("[*] Đang tiến hành làm sạch dữ liệu. Vui lòng đợi...\n")
     
-    # BƯỚC 1: CHỮA BỆNH TRÙNG LẶP (DUPLICATED)
+    # BƯỚC 1: XỬ LÝ TRÙNG LẶP (DUPLICATED)
     # Lọc bỏ các dòng bình luận spam giống hệt nhau, chỉ giữ lại dòng xuất hiện đầu tiên
     df = df.drop_duplicates(subset=['Review'], keep='first')
     so_luong_sau_xoa_trung = len(df)
     print(f"[-] Đã xóa {so_luong_ban_dau - so_luong_sau_xoa_trung} dòng bình luận bị spam trùng lặp.")
     
-    # BƯỚC 2: CHỮA BỆNH NHIỄU (NOISY) BẰNG NLP
+    # BƯỚC 2: XỬ LÝ NHIỄU (NOISY) BẰNG NLP
     # Dùng hàm apply để cho toàn bộ cột Review chạy qua bộ lọc clean_text (xóa icon, link, teencode...)
     df['Cleaned_Review'] = df['Review'].apply(clean_text)
     
-    # BƯỚC 3: CHỮA BỆNH THIẾU HỤT (MISSING)
+    # BƯỚC 3: XỬ LÝ THIẾU HỤT (MISSING)
     # Sau khi xóa link và icon, có những câu không còn chữ nào (trở thành chuỗi rỗng "")
     dieu_kien_khac_rong = (df['Cleaned_Review'] != "")
     df = df[dieu_kien_khac_rong]
     so_luong_sau_xoa_rong = len(df)
     print(f"[-] Đã xóa {so_luong_sau_xoa_trung - so_luong_sau_xoa_rong} dòng bị rỗng sau khi làm sạch.")
     
-    # BƯỚC 4: CHỮA BỆNH VÔ NGHĨA (INVALID)
+    # BƯỚC 4: XỬ LÝ VÔ NGHĨA (INVALID)
     # Lọc bỏ các câu quá ngắn, chỉ gõ 1 chữ cái lách luật
     dieu_kien_du_tu = df['Cleaned_Review'].apply(kiem_tra_du_so_luong_tu)
     df = df[dieu_kien_du_tu]
