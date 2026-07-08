@@ -57,25 +57,32 @@ else:
                     
                     # Bước C: AI đưa ra dự đoán
                     prediction = model.predict(input_vector)[0]
-                    # Lấy thêm xác suất chắc chắn của AI (Tùy chọn cho sinh động)
-                    probabilities = model.predict_proba(input_vector)[0]
-                    confidence = max(probabilities) * 100
                     
                     # 4. VÙNG HIỂN THỊ KẾT QUẢ
                     st.markdown("### 📊 Kết quả phân tích:")
                     
                     if prediction == 1:
-                        st.success(f"**TÍCH CỰC** (Độ tự tin: {confidence:.2f}%) 💖")
+                        st.success(f"**TÍCH CỰC** 💖")
                         st.balloons() # Hiệu ứng bóng bay chúc mừng
                     else:
-                        st.error(f"**TIÊU CỰC** (Độ tự tin: {confidence:.2f}%) 💔")
-                        
-                    # Hiển thị thêm góc nhìn của máy tính
+                        st.error(f"**TIÊU CỰC** 💔")
+                    
+                     # Hiển thị thêm góc nhìn của máy tính
                     with st.expander("🤖 Góc nhìn của AI (Dữ liệu đã qua xử lý)"):
                         st.write(f"- **Văn bản sau khi làm sạch (utils.py):** `{cleaned_input}`")
                         
                         # In thử các từ khóa được TF-IDF bắt trọng số
-                        df_tfidf = pd.DataFrame(input_vector.toarray(), columns=vectorizer.get_feature_names_out())
+                        # Khối try-except giúp app tương thích với cả Sklearn và Thuật toán tự xây dựng
+                        try:
+                            # Dành cho thư viện Sklearn (có hàm toarray)
+                            dense_vector = input_vector.toarray()
+                            feature_names = vectorizer.get_feature_names_out()
+                        except AttributeError:
+                            # Dành cho CustomTfidfVectorizer tự xây dựng (vốn dĩ đã là list)
+                            dense_vector = input_vector
+                            feature_names = vectorizer.feature_names
+                            
+                        df_tfidf = pd.DataFrame(dense_vector, columns=feature_names)
                         words_caught = df_tfidf.loc[:, (df_tfidf != 0).any(axis=0)]
                         st.write("- **Các từ khóa được AI chấm điểm:**")
-                        st.dataframe(words_caught)
+                        st.dataframe(words_caught)    

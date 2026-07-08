@@ -1,6 +1,7 @@
 import re
 from underthesea import word_tokenize
 import emoji
+import unicodedata
 
 # Nối các từ ghép bằng dấu gạch dưới "_"
 DANH_SACH_TEENCODE = {
@@ -51,6 +52,9 @@ def clean_text(text):
 
     # 1. Chuyển đổi về chữ in thường
     text = text.lower()
+    
+    # Ép tất cả về chuẩn Unicode Dựng sẵn (NFC)
+    text = unicodedata.normalize('NFC', text)
 
     # 2. Xử lý biểu tượng cảm xúc (Emoticons) thành các token mang sắc thái
     # Mặt cười / Tích cực: <3 | :) :)) =) ;) :] :-) | ^^ ^_^ ^-^ | :D =D
