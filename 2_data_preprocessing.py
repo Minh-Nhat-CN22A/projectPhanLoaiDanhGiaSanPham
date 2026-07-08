@@ -4,7 +4,7 @@ from utils import clean_text
 
 def kiem_tra_du_so_luong_tu(van_ban):
     """
-    Hàm này dùng để chữa bệnh 'Invalid'. 
+    Hàm này dùng để xử lý 'Invalid'. 
     Đếm số lượng chữ trong một câu. Nếu câu chỉ có 1 chữ (ví dụ: 'a', 'ok') thì trả về False để xóa.
     """
     # Ép kiểu về chuỗi chữ và cắt câu thành danh sách các từ dựa trên khoảng trắng
